@@ -1,0 +1,19 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 上传图片 -->
+  <view class="uploader">
+    <view class="uploader-text" bindtap="uploadImg">
+      <text>点击这里，测试颜值</text>
+    </view>
+  </view>
+
+  <!-- 测试结果显示 -->
+  <view>
+    <view wx:if="{{statusInfo}}">{{statusInfo}}</view>
+    <view wx:if="{{resultMsg}}">
+      <view>{{resultMsg}}</view>
+    </view>
+  </view>
+  <image style="width: 100%;" mode="widthFix" src="{{imgPath}}"></image>
+  <text>{{testMsg}}</text>
+</view>

@@ -8,12 +8,12 @@
   </view>
 
   <!-- 测试结果显示 -->
+  <image style="width: 100%;" mode="widthFix" src="{{imgPath}}"></image>
   <view>
     <view wx:if="{{statusInfo}}">{{statusInfo}}</view>
     <view wx:if="{{resultMsg}}">
       <view>{{resultMsg}}</view>
     </view>
   </view>
-  <image style="width: 100%;" mode="widthFix" src="{{imgPath}}"></image>
   <text>{{testMsg}}</text>
 </view>

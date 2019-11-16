@@ -6,6 +6,11 @@ const fsManager = wx.getFileSystemManager()
 const detectFace = require('./detect-face.js')
 // 检测结果处理函数
 const handleResult = require('./handle-result.js')
+// vant组件
+import Toast from '../../vant-weapp/toast/toast'
+
+const loadToastSelector = '#loading-toast'
+const failToastSelector = '#fail-toast'
 
 Page({
   data: {
@@ -16,37 +21,54 @@ Page({
     // 程序状态信息
     statusInfo: '',
     // 图片路径
-    imgPath: '',
+    imgPath: 'https://img.yzcdn.cn/vant/cat.jpeg',
     
     testMsg: '',
   },
 
   setStatus: function(status, msg) {
     switch(status) {
-      case 'upload':
-        break
       case 'detect':
+        Toast.loading({
+          duration: 0,       // 持续展示 toast
+          forbidClick: true, // 禁用背景点击
+          message: msg,
+          loadingType: 'spinner',
+          selector: loadToastSelector
+        });
         this.setData({
           status: 'detect',
-          statusInfo: '图片检测中'
         })
         break
       case 'success':
+        Toast.clear()
         this.setData({
           status: 'success',
-          statusInfo: msg
+          resultMsg: msg
         })
         break
       case 'fail':
+        Toast.clear()
+        Toast.fail({
+          message: msg,
+          duration: 3000,
+          selector: '#fail-toast'
+        })
         this.setData({
           status: 'fail',
           statusInfo: msg
         })
         break
       case 'error':
+        Toast.clear()
+        Toast.fail({
+          message: msg,
+          duration: 3000,
+          selector: '#fail-toast'
+        })
         this.setData({
           status: 'error',
-          statusInfo: '异常错误'
+          statusInfo: msg
         })
         break
     }
@@ -67,6 +89,7 @@ Page({
 
   // 清除之前的输出
   resetStatus: function() {
+    Toast.clear()
     this.setData({
       status: '',
       resultMsg: '',
@@ -94,23 +117,22 @@ Page({
       this.displayImg(filePath)
 
       // 调用检测API
-      this.setStatus('detect')
+      this.setStatus('detect', '图片检测中')
       return detectFace(base64Img)
     }).then(reqRes => {
       // 处理检测结果
       const data = reqRes.data
       const msg = handleResult(data)
       if(data.ret === 0) {
-        console.log('[uploagImg] 检测结果: ' + data.data.face_list)
+        console.log('[uploagImg] 检测结果: ', data.data.face_list)
         this.setStatus('success', msg) 
       }
       else {
-        console.log('[uploagImg] 检测返回码: ' + data.ret)
+        console.log('[uploagImg] 检测返回码: ', data.ret)
         this.setStatus('fail', msg)
       }
     }).catch(err => {
       console.error(err)
-      this.setStatus('error')
     })
   },
 })

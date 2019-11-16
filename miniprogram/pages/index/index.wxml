@@ -1,19 +1,33 @@
 <!--index.wxml-->
+<van-toast id="fail-toast"/>
+<van-toast id="loading-toast"/>
 <view class="container">
-  <!-- 上传图片 -->
-  <view class="uploader">
-    <view class="uploader-text" bindtap="uploadImg">
-      <text>点击这里，测试颜值</text>
-    </view>
-  </view>
+  <van-grid column-num="1" gutter="{{ 20 }}">
+    <van-grid-item use-slot>
+      <!-- 图片显示 -->
+      <van-image 
+        fit="contain" 
+        width="20rem"
+        height="15rem"
+        use-loading-slot
+        src="{{imgPath}}"
+      >
+        <van-loading
+          type="spinner"
+          size="20"
+          vertical
+        />
+      </van-image>
 
-  <!-- 测试结果显示 -->
-  <image style="width: 100%;" mode="widthFix" src="{{imgPath}}"></image>
-  <view>
-    <view wx:if="{{statusInfo}}">{{statusInfo}}</view>
-    <view wx:if="{{resultMsg}}">
-      <view>{{resultMsg}}</view>
-    </view>
+      <!-- 测试结果显示 -->
+      <van-cell label="{{resultMsg}}" border="{{ false }}" size="large"/>
+    </van-grid-item>
+  </van-grid>
+
+  <!-- 上传图片 -->
+  <view class="upload">
+    <van-button type="primary" size="large" bind:click="uploadImg">
+      选择图片
+    </van-button>
   </view>
-  <text>{{testMsg}}</text>
 </view>
